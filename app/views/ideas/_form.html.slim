@@ -1,0 +1,30 @@
+= form_with model: @idea do |f|
+  p= f.label :title
+  p= f.text_field :title
+
+  p= f.label :description
+  p= f.text_area :description
+
+  p= f.label :fund_capital
+  p= f.text_area :fund_capital
+
+  p= f.label :industries
+  p= f.text_area :industries
+
+  p= f.label :problem_solved
+  p= f.text_area :problem_solved
+
+  p= f.label :geographic_focus
+  p= f.text_area :geographic_focus
+
+  p= f.label :team_members
+  p= f.text_area :team_members
+
+  p= f.label :next_steps
+  p= f.text_area :next_steps
+
+  p= f.label :investor_require
+  p= f.text_area :investor_require
+
+  = f.submit 'Post'
+  = link_to 'Back'
