@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-   resources :ideas
+   devise_for :users, controllers: {
+     registrations: 'registrations/registrations'
+   }
+  resources :ideas
 
-   root to: 'ideas#index'
+  root to: 'ideas#index'
 end
