@@ -10,6 +10,8 @@ FactoryBot.define do
     next_steps       { "Next" }
     investor_require { "Requirement" }
 
+    association :user
+
     trait :invalid do
       title { nil }
     end

@@ -1,20 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe IdeasController, type: :controller do
+  let(:user)  { create(:user) }
   let(:idea)  { create(:idea) }
 
   describe 'GET #index' do
     let(:ideas) { create_list(:idea, 3) }
 
-    before do
-      get :index
-    end
+    before { get :index }
 
     it 'populates an array of all ideas' do
       expect(assigns(:ideas)).to match_array(ideas)
     end
 
-     it 'renders index view' do
+    it 'renders index view' do
       expect(response).to render_template :index
     end
   end
@@ -30,9 +29,7 @@ RSpec.describe IdeasController, type: :controller do
   end
 
   describe 'GET #new' do
-    before do
-      get :new
-    end
+    before { get :new }
     it 'renders new view' do
       expect(response).to render_template :new
     end
@@ -42,6 +39,7 @@ RSpec.describe IdeasController, type: :controller do
     context 'with valid attributes' do
       it 'with valid attributes saves a new idea in the database' do
         expect { post :create, params: { idea: attributes_for(:idea) } }.to change(Idea, :count).by(1)
+        expect(Idea.last.user).to eq user
       end
       it 'redirects to show view' do
         post :create, params: { idea: attributes_for(:idea) }
@@ -64,7 +62,7 @@ RSpec.describe IdeasController, type: :controller do
     let!(:idea) { create(:idea) }
 
     it 'deletes an idea' do
-        expect { delete :destroy, params: { id: idea } }.to change(Idea, :count).by(-1)
+      expect { delete :destroy, params: { id: idea } }.to change(Idea, :count).by(-1)
     end
 
     it 'redirects to question' do
@@ -73,11 +71,9 @@ RSpec.describe IdeasController, type: :controller do
     end
   end
 
-   describe 'PATCH #update' do
+  describe 'PATCH #update' do
     context 'with valid attributes' do
-      before do
-        patch :update, params: { id: idea, idea: attributes_for(:idea) }
-      end
+      before { patch :update, params: { id: idea, idea: attributes_for(:idea) } }
       it 'assigns the requested idea to @idea' do
         expect(assigns(:idea)).to eq idea
       end
