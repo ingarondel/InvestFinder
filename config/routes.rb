@@ -3,6 +3,7 @@ Rails.application.routes.draw do
      registrations: 'registrations/registrations'
    }
   resources :ideas
+  resources :users
 
   root to: 'ideas#index'
 end
