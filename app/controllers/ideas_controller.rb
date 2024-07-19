@@ -1,5 +1,6 @@
 class IdeasController < ApplicationController
   before_action :find_idea, only: %i[show edit update destroy]
+  before_action :authorize_user, only: %i[edit update destroy]
 
   def index
     @ideas = Idea.all
@@ -17,6 +18,7 @@ class IdeasController < ApplicationController
 
   def create
     @idea = Idea.new(idea_params)
+    @idea.user = current_user
     if @idea.save
       flash[:notice] = 'Your idea successfully created.'
       redirect_to @idea
@@ -49,5 +51,12 @@ class IdeasController < ApplicationController
     params.require(:idea).permit(:title, :description, :fund_capital, :industries,
                                 :problem_solved, :geographic_focus, :team_members,
                                 :next_steps, :investor_require)
+  end
+
+  def authorize_user
+    unless @idea.user == current_user
+      flash[:alert] = 'You are not authorized to perform this action.'
+      redirect_to ideas_path
+    end
   end
 end
