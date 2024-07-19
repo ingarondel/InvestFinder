@@ -1,7 +1,9 @@
-h1
-  = link_to 'New Idea', new_idea_path
-br
-- @ideas.each do |idea|
-  p
-  = link_to "#{idea.title}", idea_path(idea)
-  p = idea.description
+.container.col-12.col-md-6
+  - if user_signed_in?
+    h1
+      = link_to 'New Idea', new_idea_path, class: 'btn-link'
+  br
+  - @ideas.each do |idea|
+    p
+    = link_to "#{idea.title}", idea_path(idea)
+    p = idea.description
