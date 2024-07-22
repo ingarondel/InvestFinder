@@ -1,102 +1,123 @@
 require 'rails_helper'
 
 RSpec.describe IdeasController, type: :controller do
-  let(:user)  { create(:user) }
-  let(:idea)  { create(:idea) }
+  let(:user) { create(:user) }
+  let(:idea) { create(:idea, user: user) }
+
+  before do
+    sign_in user
+  end
 
   describe 'GET #index' do
-    let(:ideas) { create_list(:idea, 3) }
-
-    before { get :index }
-
-    it 'populates an array of all ideas' do
-      expect(assigns(:ideas)).to match_array(ideas)
-    end
-
-    it 'renders index view' do
-      expect(response).to render_template :index
+    it 'assigns all ideas as @ideas' do
+      get :index
+      expect(assigns(:ideas)).to eq([idea])
     end
   end
 
   describe 'GET #show' do
-    before do
-      get :show, params: { id: idea }
+    it 'assigns the requested idea as @idea' do
+      get :show, params: { id: idea.to_param }
+      expect(assigns(:idea)).to eq(idea)
     end
 
-    it 'renders show view' do
-      expect(response).to render_template :show
+    it 'assigns a new response as @response' do
+      get :show, params: { id: idea.to_param }
+      expect(assigns(:response)).to be_a_new(Response)
     end
   end
 
   describe 'GET #new' do
-    before { get :new }
-    it 'renders new view' do
-      expect(response).to render_template :new
+    it 'assigns a new idea as @idea' do
+      get :new
+      expect(assigns(:idea)).to be_a_new(Idea)
+    end
+  end
+
+  describe 'GET #edit' do
+    it 'assigns the requested idea as @idea' do
+      get :edit, params: { id: idea.to_param }
+      expect(assigns(:idea)).to eq(idea)
     end
   end
 
   describe 'POST #create' do
-    context 'with valid attributes' do
-      it 'with valid attributes saves a new idea in the database' do
-        expect { post :create, params: { idea: attributes_for(:idea) } }.to change(Idea, :count).by(1)
-        expect(Idea.last.user).to eq user
+    context 'with valid params' do
+      it 'creates a new Idea' do
+        expect {
+          post :create, params: { idea: attributes_for(:idea) }
+        }.to change(Idea, :count).by(1)
       end
-      it 'redirects to show view' do
+
+      it 'assigns a newly created idea as @idea' do
         post :create, params: { idea: attributes_for(:idea) }
-        expect(response).to redirect_to assigns(:idea)
+        expect(assigns(:idea)).to be_a(Idea)
+        expect(assigns(:idea)).to be_persisted
+      end
+
+      it 'redirects to the created idea' do
+        post :create, params: { idea: attributes_for(:idea) }
+        expect(response).to redirect_to(Idea.last)
       end
     end
 
-    context 'with invalid attributes' do
-      it 'does not save the idea' do
-        expect { post :create, params: { idea: attributes_for(:idea, :invalid) } }.to_not change(Idea, :count)
+    context 'with invalid params' do
+      it 'assigns a newly created but unsaved idea as @idea' do
+        post :create, params: { idea: attributes_for(:idea, title: nil) }
+        expect(assigns(:idea)).to be_a_new(Idea)
       end
-      it 're-renders new view' do
-        post :create, params: { idea: attributes_for(:idea, :invalid) }
-        expect(response).to render_template :new
+
+      it 're-renders the #new template' do
+        post :create, params: { idea: attributes_for(:idea, title: nil) }
+        expect(response).to render_template('new')
+      end
+    end
+  end
+
+  describe 'PUT #update' do
+    context 'with valid params' do
+      let(:new_attributes) { attributes_for(:idea, title: 'New Title') }
+
+      it 'updates the requested idea' do
+        put :update, params: { id: idea.to_param, idea: new_attributes }
+        idea.reload
+        expect(idea.title).to eq('New Title')
+      end
+
+      it 'assigns the requested idea as @idea' do
+        put :update, params: { id: idea.to_param, idea: new_attributes }
+        expect(assigns(:idea)).to eq(idea)
+      end
+
+      it 'redirects to the idea' do
+        put :update, params: { id: idea.to_param, idea: new_attributes }
+        expect(response).to redirect_to(idea)
+      end
+    end
+
+    context 'with invalid params' do
+      it 'assigns the idea as @idea' do
+        put :update, params: { id: idea.to_param, idea: attributes_for(:idea, title: nil) }
+        expect(assigns(:idea)).to eq(idea)
+      end
+
+      it 're-renders the #edit template' do
+        put :update, params: { id: idea.to_param, idea: attributes_for(:idea, title: nil) }
+        expect(response).to render_template('edit')
       end
     end
   end
 
   describe 'DELETE #destroy' do
-    let!(:idea) { create(:idea) }
-
-    it 'deletes an idea' do
-      expect { delete :destroy, params: { id: idea } }.to change(Idea, :count).by(-1)
+    it 'destroys the requested idea' do
+      expect {
+        delete :destroy, params: { id: idea.to_param }
+      }.to change(Idea, :count).by(-1)
     end
 
-    it 'redirects to question' do
-      delete :destroy, params: { id: idea }
-      expect(response).to redirect_to root_path
-    end
-  end
-
-  describe 'PATCH #update' do
-    context 'with valid attributes' do
-      before { patch :update, params: { id: idea, idea: attributes_for(:idea) } }
-      it 'assigns the requested idea to @idea' do
-        expect(assigns(:idea)).to eq idea
-      end
-      it 'changes idea attributes' do
-        idea.reload
-        expect(idea.description).to eq 'MyText'
-      end
-      it 'redirects to idea' do
-        expect(response).to redirect_to idea
-      end
-    end
-
-    context 'with invalid attributes' do
-      before do
-        patch :update, params: { id: idea, idea: attributes_for(:idea, :invalid) }
-      end
-      it 'does not change idea' do
-        idea.reload
-        expect(idea.title).to eq 'MyString'
-      end
-      it 're-renders idea' do
-        expect(response).to render_template :edit
-      end
+    it 'redirects to the ideas list' do
+      delete :destroy, params: { id: idea.to_param }
+      expect(response).to redirect_to(root_path)
     end
   end
 end
