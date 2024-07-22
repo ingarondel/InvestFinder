@@ -1,4 +1,5 @@
 class Idea < ApplicationRecord
+  has_many :responses
   belongs_to :user
 
   validates :title,          :description,      :fund_capital, :industries,
