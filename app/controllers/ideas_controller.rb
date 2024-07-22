@@ -1,4 +1,5 @@
 class IdeasController < ApplicationController
+  before_action :authenticate_user!
   before_action :find_idea, only: %i[show edit update destroy]
   before_action :authorize_user, only: %i[edit update destroy]
 
@@ -7,6 +8,7 @@ class IdeasController < ApplicationController
   end
 
   def show
+    @response = @idea.responses.new
   end
 
   def new
