@@ -1,0 +1,23 @@
+.container.col-12.col-md-6
+  h1
+    = @idea.title
+
+  p = @idea.description
+  br
+  strong Fund capital:
+  p = @idea.fund_capital
+  strong Industry:
+  p = @idea.industries
+  strong What problem must be solved:
+  p = @idea.problem_solved
+  strong Region:
+  p = @idea.geographic_focus
+  strong Team members:
+  p = @idea.team_members
+  strong Next steps:
+  p = @idea.next_steps
+  strong Investor requirement:
+  p = @idea.investor_require
+
+  = link_to "Edit|", edit_idea_path(@idea)
+  = link_to "Back", root_path
