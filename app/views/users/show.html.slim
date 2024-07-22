@@ -1,0 +1,21 @@
+.container.col-12.col-md-6
+  h1 #{@user.name} #{@user.surname}
+  - if @user == current_user
+    = button_to 'Edit my account', edit_user_registration_path(@user), class: "btn btn-link", method: :get
+    h2 My ideas
+  - else
+    h2 #{@user.name} #{@user.surname} ideas:
+  - if @user.ideas.any?
+    - @user.ideas.each do |idea|
+      .form-group.form-control.bg-light
+        = link_to "#{idea.title}", idea, class: 'btn btn-link'
+        p = idea.description
+        - if @user == current_user
+          .actions
+            = button_to 'Edit', edit_idea_path(idea), class: "btn btn-link", method: :get
+            = button_to 'Delete', idea_path(idea), class: "btn btn-link", method: :delete
+  - else
+    p No ideas yet.
+
+  - if @user == current_user
+    = link_to 'New idea', new_idea_path, class: 'btn btn-success'
