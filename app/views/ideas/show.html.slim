@@ -1,0 +1,28 @@
+.container.col-12.col-md-6
+  h1
+    = @idea.title
+
+  p = @idea.description
+  br
+  strong Fund capital:
+  p = @idea.fund_capital
+  strong Industry:
+  p = @idea.industries
+  strong What problem must be solved:
+  p = @idea.problem_solved
+  strong Region:
+  p = @idea.geographic_focus
+  strong Team members:
+  p = @idea.team_members
+  strong Next steps:
+  p = @idea.next_steps
+  strong Investor requirement:
+  p = @idea.investor_require
+  - if user_signed_in? && current_user.type == 'Investor'
+    - if @idea.responses.where(investor: current_user).exists?
+      = button_to "#{@idea.responses.count} Response", idea_response_path(@idea, @idea.responses.find_by(investor: current_user)), method: :delete, class: "btn btn-success"
+    - else
+      = button_to "#{@idea.responses.count} Response", idea_responses_path(@idea), method: :post, class: "btn btn-secondary"
+  - if @idea.user == current_user
+    = link_to "Edit|", edit_idea_path(@idea)
+  = link_to "Back", root_path

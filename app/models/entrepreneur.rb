@@ -1,0 +1,2 @@
+class Entrepreneur < User
+end
