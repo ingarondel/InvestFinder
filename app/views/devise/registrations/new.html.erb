@@ -31,6 +31,14 @@
     <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
   </div>
 
+  <div class="field">
+    <%= f.label :type, "Select your type:" %><br />
+    <%= f.radio_button :type, 'Investor' %>
+    <%= f.label :type, 'Investor' %>
+    <%= f.radio_button :type, 'Entrepreneur' %>
+    <%= f.label :type, 'Entrepreneur' %>
+  </div>
+
   <div class="actions">
     <%= f.submit "Sign up" %>
   </div>
