@@ -5,7 +5,9 @@ Rails.application.routes.draw do
   resources :ideas do
     resources :responses, only: [:create, :destroy]
   end
-  resources :users
+  resources :users do
+    resources :contacts, only: [:new, :create, :edit, :update, :destroy]
+  end
 
   root to: 'ideas#index'
 end
