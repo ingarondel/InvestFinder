@@ -18,11 +18,15 @@
   p = @idea.next_steps
   strong Investor requirement:
   p = @idea.investor_require
-  - if user_signed_in? && current_user.type == 'Investor'
-    - if @idea.responses.where(investor: current_user).exists?
-      = button_to "#{@idea.responses.count} Response", idea_response_path(@idea, @idea.responses.find_by(investor: current_user)), method: :delete, class: "btn btn-success"
-    - else
-      = button_to "#{@idea.responses.count} Response", idea_responses_path(@idea), method: :post, class: "btn btn-secondary"
-  - if @idea.user == current_user
-    = link_to "Edit|", edit_idea_path(@idea)
+
+  - if user_signed_in?
+    - if current_user.type == 'Investor'
+      - if @idea.responses.where(investor: current_user).exists?
+        = button_to "#{@idea.responses.count} Response", idea_response_path(@idea, @idea.responses.find_by(investor: current_user)), method: :delete, class: "btn btn-success"
+      - else
+        = button_to "#{@idea.responses.count} Response", idea_responses_path(@idea), method: :post, class: "btn btn-secondary"
+    - if @idea.user == current_user
+      = render 'include/contacts'
+      = link_to "Edit|", edit_idea_path(@idea)
+
   = link_to "Back", root_path
