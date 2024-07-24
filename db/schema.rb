@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_22_095422) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_24_083755) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -44,6 +44,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_22_095422) do
   create_table "responses", force: :cascade do |t|
     t.bigint "idea_id", null: false
     t.bigint "investor_id", null: false
+    t.bigint "contact_id", null: false
+    t.index ["contact_id"], name: "index_responses_on_contact_id"
     t.index ["idea_id"], name: "index_responses_on_idea_id"
     t.index ["investor_id"], name: "index_responses_on_investor_id"
   end
@@ -75,6 +77,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_22_095422) do
   end
 
   add_foreign_key "contacts", "users", column: "investor_id"
+  add_foreign_key "responses", "contacts"
   add_foreign_key "responses", "ideas"
   add_foreign_key "responses", "users", column: "investor_id"
 end
