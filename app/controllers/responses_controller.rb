@@ -6,11 +6,17 @@ class ResponsesController < ApplicationController
 
   def create
     @response = @idea.responses.new(investor: current_user)
+    @response.contact = current_user.contact
     if @response.save
       flash[:notice] = 'Your response was successfully created.'
       redirect_to @idea
     else
+      unless @response.investor.contact.present?
+      flash[:notice] = 'You must have a contact created before leaving a response.'
+      redirect_to new_user_contact_path(current_user)
+      else
       render 'ideas/show'
+      end
     end
   end
 
