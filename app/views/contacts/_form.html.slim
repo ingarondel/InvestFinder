@@ -1,0 +1,11 @@
+= form_with model: [@user, @contact], url: @contact.persisted? ? user_contact_path(@user, @contact) : user_contacts_path(@user), local: true do |f|
+  p= f.label :phone
+  p= f.text_field :phone
+
+  p= f.label :email
+  p= f.email_field :email, value: @user.email
+
+  p= f.label :website
+  p= f.text_field :website
+
+  p= f.submit

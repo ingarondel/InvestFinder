@@ -1,0 +1,31 @@
+= form_with model: @idea do |f|
+  p= f.label :title
+  p= f.text_field :title
+
+  p= f.label :description
+  p= f.text_area :description
+
+  p= f.label :fund_capital
+  = f.number_field :fund_capital, min: 0, step: 1000
+  span.fund-capital-label USD
+
+  p= f.label :industries
+  = f.select :industries, options_for_select(["Graphics & Design", "Digital Marketing", "WEB", "Software", "Mobile", "Blockchain"]), { include_blank: "Select an industry" }, class: "industry-select"
+
+  p= f.label :geographic_focus
+  = f.select :geographic_focus, options_for_select(["North America", "South America", "Europe", "Asia", "Africa", "Australia/Oceania"]), { include_blank: "Select location" }, class: "geographic-focus-select"
+
+  p= f.label :team_members
+  p= f.text_area :team_members
+
+  p= f.label :problem_solved
+  p= f.text_area :problem_solved
+
+  p= f.label :next_steps
+  p= f.text_area :next_steps
+
+  p= f.label :investor_require
+  p= f.text_area :investor_require
+
+  = f.submit 'Post'
+  = link_to 'Back'
