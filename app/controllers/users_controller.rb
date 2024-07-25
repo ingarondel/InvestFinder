@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     @ideas = @user.ideas
-    @contact = @user.contact
+    @contact = @user.contact if @user.type == 'Investor'
   end
 
   def destroy
