@@ -4,6 +4,7 @@ Rails.application.routes.draw do
    }
   resources :ideas do
     resources :responses, only: [:create, :destroy]
+    resources :comments, shallow: true
   end
   resources :users do
     resources :contacts, only: [:new, :create, :edit, :update, :destroy]
