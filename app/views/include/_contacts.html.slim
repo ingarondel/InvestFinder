@@ -1,0 +1,15 @@
+h1 List of Investors
+table.table.table-striped.table-hover
+  thead
+    tr
+      th Phone
+      th Email
+      th Website
+  tbody
+    - if @idea.responses.present?
+      - @idea.responses.each do |response|
+        - if response.investor.present?
+          tr
+            td = response.investor.contact.phone
+            td = response.investor.contact.email
+            td = response.investor.contact.website

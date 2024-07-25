@@ -1,0 +1,64 @@
+.container.col-12.col-md-6
+  h1
+    = @idea.title
+
+  p = @idea.description
+  br
+  strong Fund capital:
+  p = @idea.fund_capital
+  strong Industry:
+  p = @idea.industries
+  strong What problem must be solved:
+  p = @idea.problem_solved
+  strong Region:
+  p = @idea.geographic_focus
+  strong Team members:
+  p = @idea.team_members
+  strong Next steps:
+  p = @idea.next_steps
+  strong Investor requirement:
+  p = @idea.investor_require
+
+  - if user_signed_in?
+    - if current_user.type == 'Investor'
+      - if @idea.responses.where(investor: current_user).exists?
+        = button_to "#{@idea.responses.count} Response", idea_response_path(@idea, @idea.responses.find_by(investor: current_user)), method: :delete, class: "btn btn-success"
+      - else
+        = button_to "#{@idea.responses.count} Response", idea_responses_path(@idea), method: :post, class: "btn btn-secondary"
+    - if @idea.user == current_user
+      = render 'include/contacts'
+      = link_to "Edit|", edit_idea_path(@idea)
+
+  h2 Comments
+  .col-md-6
+    - if @idea.comments.any?
+      - @idea.comments.each do |comment|
+        .form-group.form-control.bg-light
+          .comment-container.comment-header
+            - if comment.user.present?
+              h5 = link_to "#{comment.user.name} #{comment.user.surname}", user_path(comment.user), class: 'btn-link'
+              - if comment.user == current_user
+                .actions
+                  = link_to 'Edit | ', edit_comment_path(comment), class: 'btn-link right-align'
+                  = button_to 'Delete', comment_path(comment), method: :delete, class: 'btn-delete'
+            - else
+              p Deleted user
+          p = comment.content
+          .actions
+            .date
+              = comment.created_at.strftime("%Y-%m-%d %H:%M")
+              - if comment.updated_at != comment.created_at
+                || Updated:
+                = comment.updated_at.strftime("%Y-%m-%d %H:%M")
+    - else
+      p No comments yet.
+
+    - if user_signed_in?
+      h2 Add a Comment
+      = form_with(model: [@idea, @comment], local: true) do |f|
+        .form-group
+          = f.text_area :content, class: 'form-control', placeholder: 'Comment'
+        .form-group
+          = f.submit 'Submit', class: 'btn btn-success'
+
+  = link_to "Back", root_path
