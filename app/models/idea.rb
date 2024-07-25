@@ -1,4 +1,5 @@
 class Idea < ApplicationRecord
+  has_many   :reactions, dependent: :destroy, as: :reactable
   has_many   :responses
   has_many   :comments,  dependent: :destroy
   belongs_to :user
