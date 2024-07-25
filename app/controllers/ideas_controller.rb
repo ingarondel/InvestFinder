@@ -9,6 +9,8 @@ class IdeasController < ApplicationController
 
   def show
     @response = @idea.responses.new
+    @comment = Comment.new
+    @comments = @idea.comments
   end
 
   def new
