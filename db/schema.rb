@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_25_081050) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_25_084853) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,6 +51,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_25_081050) do
     t.index ["user_id"], name: "index_ideas_on_user_id"
   end
 
+  create_table "reactions", force: :cascade do |t|
+    t.string "reactable_type"
+    t.bigint "reactable_id"
+    t.bigint "user_id", null: false
+    t.integer "reaction_type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["reactable_type", "reactable_id"], name: "index_reactions_on_reactable"
+    t.index ["user_id"], name: "index_reactions_on_user_id"
+  end
+
   create_table "responses", force: :cascade do |t|
     t.bigint "idea_id", null: false
     t.bigint "investor_id", null: false
@@ -89,6 +100,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_25_081050) do
   add_foreign_key "comments", "ideas"
   add_foreign_key "comments", "users"
   add_foreign_key "contacts", "users", column: "investor_id"
+  add_foreign_key "reactions", "users"
   add_foreign_key "responses", "contacts"
   add_foreign_key "responses", "ideas"
   add_foreign_key "responses", "users", column: "investor_id"
