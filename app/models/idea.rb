@@ -1,5 +1,6 @@
 class Idea < ApplicationRecord
-  has_many :responses
+  has_many   :responses
+  has_many   :comments,  dependent: :destroy
   belongs_to :user
 
   validates :title,          :description,      :fund_capital, :industries,
